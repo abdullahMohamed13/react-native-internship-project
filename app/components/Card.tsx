@@ -2,6 +2,7 @@ import { View, Image, StyleSheet, ViewStyle, ImageSourcePropType } from "react-n
 import { Text } from 'react-native-paper'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 import { mainTheme } from "../theme/themes";
 
@@ -33,27 +34,33 @@ This card shows a fighting event with its details:
 
 export default function EventCard({ fighters, division, eventDate, location, moreCardStyle }: CardProps) {
     return (
-        <View style={[styles.container, moreCardStyle]}>
+        <View style={[styles.cardContainer, moreCardStyle]}>
             {/* Show what is the type of the fight */}
             <Text style={styles.ufcText}>
                 UFC {division} {fighters.fighter2.role ? 'Championship' : 'Fight'}
             </Text>
 
             {/* Fighters Container */}
-            <View style={styles.imgContainer}>
+            <View style={styles.innerContainer}>
 
                 {/* Fighter1 Contianer */}
                 <View style={styles.fighterContainer}>
                     {/* If one of the players has a role, show the badge */}
                     {fighters.fighter1.role && (
-                        <View style={styles.badge}>
-                        <Text style={styles.badgeText}>
-                            {fighters.fighter1.role === 'champion' ? 'CHAMPION' : 
-                            fighters.fighter1.role === 'challenger' ? 'CHALLENGER' : ''}
-                        </Text>
+                        <View style={[
+                        styles.badge, 
+                        { backgroundColor: fighters.fighter1.role === 'champion' ? mainTheme.primary : mainTheme.secondary }
+                        ]}>
+                            <Text style={styles.badgeText}>
+                                {fighters.fighter1.role === 'champion' ? 'CHAMPION' : 
+                                fighters.fighter1.role === 'challenger' ? 'CHALLENGER' : ''}
+                            </Text>
                         </View>
                     )}
-                    <Image source={fighters.fighter1.img} style={styles.image} />
+                    <Image source={fighters.fighter1.img} style={[styles.image, fighters.fighter1.role === 'champion' && styles.championImage]} />
+                    {fighters.fighter1.role === 'champion' && (
+                        <FontAwesome5 name="crown" size={18} color="#D9A441" style={styles.beltIcon} />
+                    )}
                     <Text style={styles.fighterText}>{fighters.fighter1.name}</Text>
                 </View>
 
@@ -62,15 +69,21 @@ export default function EventCard({ fighters, division, eventDate, location, mor
                 {/* Fighter2 Container */}
                 <View style={styles.fighterContainer}>
                     {/* If one of the players has a role, show the badge */}
-                    {fighters.fighter1.role && (
-                        <View style={styles.badge}>
+                    {fighters.fighter2.role && (
+                        <View style={[
+                            styles.badge, 
+                            { backgroundColor: fighters.fighter2.role === 'champion' ? mainTheme.primary : mainTheme.secondary }
+                        ]}>
                                 <Text style={styles.badgeText}>
                                 {fighters.fighter2.role === 'champion' ? 'CHAMPION' : 
                                 fighters.fighter2.role === 'challenger' ? 'CHALLENGER' : ''}
                             </Text>
                         </View>
                     )}
-                    <Image source={fighters.fighter2.img} style={styles.image} />
+                    <Image source={fighters.fighter2.img} style={[styles.image, fighters.fighter2.role === 'champion' && styles.championImage]} />
+                    {fighters.fighter2.role === 'champion' && (
+                        <FontAwesome5 name="crown" size={18} color="#D9A441" style={styles.beltIcon} />
+                    )}
                     <Text style={styles.fighterText}>{fighters.fighter2.name}</Text>
                 </View>
             </View>
@@ -91,17 +104,18 @@ export default function EventCard({ fighters, division, eventDate, location, mor
 }
 
 const styles = StyleSheet.create({
-    container: {
+    cardContainer: {
         backgroundColor: mainTheme.background,
-        padding: 16,
+        padding: 10,
         borderRadius: 8,
         alignItems: 'center',
         marginVertical: 8,
     },
-    imgContainer: {
+    innerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        marginTop: 20,
         width: '100%',
         marginBottom: 12,
     },
@@ -151,12 +165,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '500',
         textAlign: 'center',
+        marginBottom: 4
     },
     eventInfo: {
         flex: 1,
         gap: 2,
         alignItems: 'center',
         alignSelf: "flex-start",
-        flexDirection: 'row'
-    }
+        flexDirection: 'row',
+        marginTop: 2
+    },
+    championImage: {
+        borderColor: '#D9A441',
+        borderWidth: 3,
+    },
+    beltIcon: {
+        position: 'absolute',
+        bottom: -12,
+    },
 })
