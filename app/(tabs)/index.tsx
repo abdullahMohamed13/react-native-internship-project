@@ -27,14 +27,14 @@ export default function Index() {
         eventDate="4 Oct - 21:00"
         fighters={{
           fighter1:{
-            name: 'Alex',
-            img: require('../../assets/images/fighters/alex-p.png'),
-            role: 'challenger'
-          },
-          fighter2: {
             name: 'Ankalaev',
             img: require('../../assets/images/fighters/magamedov.png'),
             role: 'champion'
+          },
+          fighter2: {
+            name: 'Alex',
+            img: require('../../assets/images/fighters/alex-p.png'),
+            role: 'challenger'
           }
         }}
       />

@@ -1,3 +1,5 @@
+import {Text} from 'react-native'
+
 export default function ProfileScreen() {
-    return <>HI</>
+    return <Text>HI</Text>
 }
