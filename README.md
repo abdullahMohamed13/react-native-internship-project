@@ -10,3 +10,8 @@
    <p align='center'>Home Screen</p>
    <img src="./assets/images/screenshots/home.jpg" alt="Home Screen" width="300"/>
 </div>
+
+## Tech Stack:
+- expo
+- react-native-paper
+- react-native-vector-icons
