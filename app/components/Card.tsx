@@ -1,5 +1,4 @@
-import { View, Image, StyleSheet, ViewStyle, ImageSourcePropType } from "react-native";
-import { Text } from 'react-native-paper'
+import { View, Image, Text, StyleSheet, ViewStyle, ImageSourcePropType } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -105,7 +104,7 @@ export default function EventCard({ fighters, division, eventDate, location, mor
 
 const styles = StyleSheet.create({
     cardContainer: {
-        backgroundColor: mainTheme.background,
+        backgroundColor: mainTheme.card,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -168,7 +167,6 @@ const styles = StyleSheet.create({
         marginBottom: 4
     },
     eventInfo: {
-        flex: 1,
         gap: 2,
         alignItems: 'center',
         alignSelf: "flex-start",

@@ -1,26 +1,29 @@
+import { KeyboardAvoidingView, Text, View, Platform, StyleSheet, TouchableOpacity } from "react-native";
+import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Link, Stack, useRouter } from "expo-router";
-import { KeyboardAvoidingView, View, Platform, StyleSheet } from "react-native";
-// react-native-paper Components
-import { Text, TextInput, Button, useTheme } from 'react-native-paper'
 // Vector icons
 import Feather from '@expo/vector-icons/Feather';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Fontisto from '@expo/vector-icons/Fontisto';
+import AntDesign from "@expo/vector-icons/AntDesign";
+// Redux
+import { setEmail, setPhoneNumber, setPassword, setFullname, setGender } from '../slices/userSlice'
+import { useDispatch, useSelector } from "react-redux";
+// Custom Stuff
+import AppInput from "../components/AppInput";
 import { mainTheme } from "@/app/theme/themes";
+import ScreenTitle from "../components/ScreenTitle";
 
 export default function AuthScreen() {
     const router = useRouter()
-    const theme = useTheme()
+    const dispatch = useDispatch();
 
     // states
-    const [isSignUp, setIsSignUp] = useState<boolean>(false);
+    const [isSignUp, setIsSignUp] = useState<boolean>(true);
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null);
 
-    // user login/signup data states
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [fullname, setFullName] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
+    const { email, phoneNumber, password, fullname, gender } = useSelector((state: any) => state.user)
 
     // Show error msg just for 4 sec
     useEffect(() => {
@@ -30,12 +33,14 @@ export default function AuthScreen() {
         }
     }, [error])
 
-    // Check if all fields are not empty
     const handleSubmit = () => {
-        if (!email || !password || (!isSignUp && (!fullname || !phoneNumber))) {
+        // Check if all fields are not empty
+        if (!email || !password || (isSignUp && (!fullname || !phoneNumber || !gender))) {
             setError("All fields are required");
             return;
         }
+
+        // for now go straight to home page
         router.replace('/');
     };
 
@@ -48,11 +53,10 @@ export default function AuthScreen() {
                 <Feather style={styles.icon} name={isSignUp ? 'at-sign' : 'user'} size={50} color={mainTheme.primary} />
 
                 {/* Title */}
-                <Text variant="headlineMedium" style={{fontWeight: 'bold'}}>
-                    {isSignUp ? 'Log in to UFC Events' : 'Create your account'}
-                </Text>
+                <ScreenTitle text={isSignUp ? 'Log in to UFC Events' : 'Create your account'} />
+
                 {/* Description */}
-                <Text style={{textAlign: 'center', paddingHorizontal: 10}}>
+                <Text style={styles.description}>
                     {isSignUp ?
                         'Access fight cards, track upcoming events, and stay updated.' :
                         'Join UFC Events to follow fighters, view match cards, and never miss a fight night.'
@@ -60,96 +64,105 @@ export default function AuthScreen() {
                 </Text>
                 
                 {!isSignUp && (
-                    // Full name in SignUp
                     <>
-                        <TextInput
-                            label='Full Name'
-                            mode="outlined"
+                        {/* Full name in SignUp */}
+                        <AppInput
+                            label="Full Name"
                             placeholder="ex: Mohamed Ibrahim"
-                            style={styles.input}
-                            onChangeText={setFullName}
-                            theme={{
-                                colors: {
-                                    primary: mainTheme.primary,
-                                    outline: mainTheme.secondary
-                                }
+                            value={fullname}
+                            onChangeText={(text) => dispatch(setFullname(text))}
+                            icons={{
+                                leftIcon: <Feather name="user" size={24} color="black" />,
                             }}
-                            left={<TextInput.Icon icon={'account'} />}
                         />
                         {/* Phone Number in SignUp */}
-                        <TextInput
-                            label='Phone Number'
-                            mode="outlined"
+                        <AppInput
+                            label="Phone Number"
+                            placeholder="example@gmail.com"
                             keyboardType="phone-pad"
-                            onChangeText={setPhoneNumber}
-                            style={styles.input}
-                            theme={{
-                                colors: {
-                                    primary: mainTheme.primary,
-                                    outline: mainTheme.secondary
-                                }
+                            value={phoneNumber}
+                            onChangeText={(text) => dispatch(setPhoneNumber(text))}
+                            icons={{
+                                leftIcon: <Feather name="phone" size={24} color="black" />,
                             }}
-                            left={<TextInput.Icon icon={'phone'} />}
                         />
                     </>
                 )}
+
                 {/* Email */}
-                <TextInput
-                    autoCapitalize="none"
-                    label='Email'
-                    mode="outlined"
-                    onChangeText={setEmail}
+                <AppInput
+                    label="Email"
                     placeholder="example@gmail.com"
                     keyboardType="email-address"
-                    style={styles.input}
-                    theme={{
-                        colors: {
-                            primary: mainTheme.primary,
-                            outline: mainTheme.secondary
-                        }
+                    value={email}
+                    onChangeText={(text) => dispatch(setEmail(text))}
+                    icons={{
+                        leftIcon: <Fontisto name="email" size={24} color="black" />,
                     }}
-                    left={<TextInput.Icon icon={'email'} />}
-                    />
-                {/* Password */}
-                <TextInput
-                    autoCapitalize="none"
-                    onChangeText={setPassword}
-                    label='Password'
-                    mode="outlined"
-                    style={styles.input}
-                    secureTextEntry={!passwordVisible}
-                    theme={{
-                        colors: {
-                            primary: mainTheme.primary,
-                            outline: mainTheme.secondary
-                        }
-                    }}
-                    right={<TextInput.Icon
-                        onPress={() => setPasswordVisible(prev => !prev)}
-                        icon={passwordVisible ? 'eye' : 'eye-off'} />}
-                    left={<TextInput.Icon icon={'lock'} />}
                 />
 
-                {/* if there is incomplete fields */}
-                {error && <Text style={{color: theme.colors.error, fontWeight: 'bold'}}>{error}</Text>}
+                {/* Password */}
+                <AppInput
+                    label="Password"
+                    placeholder="Enter password"
+                    value={password}
+                    secureTextEntry={!passwordVisible}
+                    onChangeText={(text) => dispatch(setPassword(text))}
+                    icons={{
+                        leftIcon: <Ionicons name="lock-closed-outline" size={20} color="gray" />,
+                        rightIcon: () => (
+                        <AntDesign
+                            name={passwordVisible ? "eye" : "eye-invisible"}
+                            size={20}
+                            color={mainTheme.secondary}
+                            onPress={() => setPasswordVisible((prev) => !prev)}
+                        />
+                        ),
+                    }}
+                />
 
-                <Button mode="contained"
-                    style={styles.actionButton}
+                {/* Gender - Show only on signup*/}
+                {!isSignUp && 
+                    <View style={styles.genderContainer}>
+                        <TouchableOpacity
+                            style={[styles.genderOption, gender === "Male" && styles.selectedGender]}
+                            onPress={() => dispatch(setGender("Male"))}
+                        >
+                            <Text style={[styles.genderText, gender === "Male" && styles.selectedGenderText]}>
+                            Male
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[styles.genderOption, gender === "Female" && styles.selectedGender]}
+                            onPress={() => dispatch(setGender("Female"))}
+                        >
+                            <Text style={[styles.genderText, gender === "Female" && styles.selectedGenderText]}>
+                            Female
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+
+                {/* if there is incomplete fields */}
+                {error && <Text style={{color: '#e20000', fontWeight: 'bold'}}>{error}</Text>}
+
+                <TouchableOpacity
                     onPress={handleSubmit}
-                    >
-                    {isSignUp ? 'Log in' : 'Sign up'}
-                </Button>
-                {/* Toggle between LogIn and SignUp */}
-                <Button mode="text"
-                    onPress={() => setIsSignUp(prev => !prev)}
-                    labelStyle={{ color: mainTheme.accent }}
                 >
-                    {isSignUp ? "Don't have an account? Sign Up" : 'Already have an account? Log In'}
-                </Button>
+                    <Text style={styles.actionButton}>{isSignUp ? 'Log in' : 'Sign up'}</Text>
+                </TouchableOpacity>
+
+                {/* Toggle between LogIn and SignUp */}
+                <TouchableOpacity onPress={() => setIsSignUp(prev => !prev)}>
+                    <Text style={styles.toggleButton}>
+                        {isSignUp ? "Don't have an account? Sign Up" : 'Already have an account? Log In'}
+                    </Text>
+                </TouchableOpacity>
             </View>
 
         </KeyboardAvoidingView>
-        </>
+    </>
 }
 
 const styles = StyleSheet.create({
@@ -166,17 +179,52 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 12,
     },
+    description: {
+        textAlign: 'center',
+        paddingHorizontal: 10,
+    },
     icon: {
         backgroundColor: mainTheme.background,
         borderRadius: 60,
         padding: 9
     },
-    input: {
-        width: '100%'
-    },
     actionButton: {
-        fontSize: 20,
-        width: '100%',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: mainTheme.buttons,
+        paddingHorizontal: 22,
+        paddingVertical: 8,
+        borderRadius: 10,
         backgroundColor: mainTheme.secondary
     },
+    toggleButton: {
+        color: mainTheme.accent
+    },
+    genderContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        gap: 10,
+        marginVertical: 8,
+    },
+    genderOption: {
+        flex: 1,
+        paddingVertical: 12,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        alignItems: "center",
+    },
+    selectedGender: {
+        backgroundColor: mainTheme.primary,
+        borderColor: mainTheme.primary,
+    },
+    genderText: {
+        fontSize: 16,
+        color: "#333",
+    },
+    selectedGenderText: {
+        color: "#fff",
+        fontWeight: "bold",
+    },
+
 })
