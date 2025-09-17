@@ -2,20 +2,20 @@
 
 <div align='center'>
    <p align='center'>Registration Screens</p>
-   <img src="./assets/images/screenshots/login.jpg" alt="Login Screen" width="200"/>
-   <img src="./assets/images/screenshots/signup.jpg" alt="Signup Screen" width="200"/>
+   <img src="./assets/images/screenshots/login.jpg" alt="Login Screen" width="250"/>
+   <img src="./assets/images/screenshots/signup.jpg" alt="Signup Screen" width="250"/>
    
    <br />
    <hr />
    
    <p align='center'>Home Screen</p>
-   <img src="./assets/images/screenshots/home.jpg" alt="Home Screen" width="200"/>
+   <img src="./assets/images/screenshots/home.jpg" alt="Home Screen" width="250"/>
    
    <br />
    <hr />
    
    <p align='center'>Profile Screen</p>
-   <img src="./assets/images/screenshots/profile.jpg" alt="Profile Screen" width="200"/>
+   <img src="./assets/images/screenshots/profile.jpg" alt="Profile Screen" width="250"/>
 </div>
 
 ## Tech Stack:
