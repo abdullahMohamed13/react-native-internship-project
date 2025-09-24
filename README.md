@@ -16,6 +16,12 @@
    
    <p align='center'>Profile Screen</p>
    <img src="./assets/images/screenshots/profile.jpg" alt="Profile Screen" width="250"/>
+   
+   <br />
+   <hr />
+   
+   <p align='center'>Movies Screen</p>
+   <img src="./assets/images/screenshots/movies.jpg" alt="Movies Screen" width="250"/>
 </div>
 
 ## Tech Stack:
