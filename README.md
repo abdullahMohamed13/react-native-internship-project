@@ -21,6 +21,8 @@
    <hr />
    
    <p align='center'>Movies Screen</p>
+   <p align='center'>All data is fetched and represented from an open-source API</p>
+   <p align='center'>API used: [https://reactnative.dev/movies.json]</p>
    <img src="./assets/images/screenshots/movies.jpg" alt="Movies Screen" width="250"/>
 </div>
 
